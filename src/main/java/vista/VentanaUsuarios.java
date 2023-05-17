@@ -11,8 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import modelo.DaoException;
 import modelo.Usuario;
@@ -125,7 +123,7 @@ public class VentanaUsuarios extends javax.swing.JFrame {
         pfPassword.setText("jPasswordField1");
         pfPassword.setVisible(false);
 
-        cbRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ADMINISTRADOR", "REGISTRADO" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -173,6 +171,11 @@ public class VentanaUsuarios extends javax.swing.JFrame {
         );
 
         bListarUsuarios.setText("LISTAR USUARIOS");
+        bListarUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bListarUsuariosActionPerformed(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("LISTADO DE USUARIOS"));
         /*jPanel2.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -244,12 +247,9 @@ public class VentanaUsuarios extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(300, 300, 300)
-                        .addComponent(bListarUsuarios))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
@@ -263,8 +263,11 @@ public class VentanaUsuarios extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bEditar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bBorrar)))))
-                .addGap(19, 19, 19)
+                                .addComponent(bBorrar)))
+                        .addGap(59, 59, 59))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(bListarUsuarios)
+                        .addGap(18, 18, 18)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -284,7 +287,7 @@ public class VentanaUsuarios extends javax.swing.JFrame {
                                 .addComponent(bBuscar)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
+                        .addGap(18, 18, 18)
                         .addComponent(bListarUsuarios)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -293,7 +296,7 @@ public class VentanaUsuarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void miCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCrearActionPerformed
-        if(this.dialogoUsuario.mostrar()==DialogoUsuario.ACEPTAR){
+        if(this.dialogoUsuario.mostrarCrear()==DialogoUsuario.ACEPTAR){
             tfNombre.setText(dialogoUsuario.getNombre());
             pfPassword.setText(dialogoUsuario.getPassword());
             
@@ -315,6 +318,10 @@ public class VentanaUsuarios extends javax.swing.JFrame {
             Logger.getLogger(VentanaUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bBuscarActionPerformed
+
+    private void bListarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bListarUsuariosActionPerformed
+        controlador.listar();
+    }//GEN-LAST:event_bListarUsuariosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -362,6 +369,7 @@ public class VentanaUsuarios extends javax.swing.JFrame {
     public static final int ACEPTAR = 1;
     public static final int CANCELAR = 0;
     private int opcion;
+    private UsuarioTableModel contactoTM;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bBorrar;
     private javax.swing.JButton bBuscar;
@@ -371,7 +379,6 @@ public class VentanaUsuarios extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbRol;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
-    private UsuarioTableModel contactoTM;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel lEmail;
@@ -398,7 +405,7 @@ public class VentanaUsuarios extends javax.swing.JFrame {
         tfBuscarUsuario.setText("");
         tfEmail.setText("");
         pfPassword.setText("");
-        
+        cbRol.setSelectedItem(0);
     }
 
     public void setControlador(ControladorUsuarios controlador) {
