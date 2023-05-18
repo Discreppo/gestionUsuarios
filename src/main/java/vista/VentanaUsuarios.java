@@ -20,11 +20,10 @@ import modelo.Usuario;
  * @author daw1
  */
 public class VentanaUsuarios extends javax.swing.JFrame {
-    
-    private ControladorUsuarios controlador;
-    private DialogoUsuario dialogoUsuario = new DialogoUsuario(this,true);
 
-    
+    private ControladorUsuarios controlador;
+    private DialogoUsuario dialogoUsuario = new DialogoUsuario(this, true);
+
     /**
      * Creates new form VentanaUsuarios
      */
@@ -119,6 +118,10 @@ public class VentanaUsuarios extends javax.swing.JFrame {
 
         lPassword.setText("PASSWORD");
         lPassword.setVisible(false);
+
+        tfNombre.setEditable(false);
+
+        tfEmail.setEditable(false);
 
         pfPassword.setText("jPasswordField1");
         pfPassword.setVisible(false);
@@ -296,11 +299,18 @@ public class VentanaUsuarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void miCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCrearActionPerformed
-        if(this.dialogoUsuario.mostrarCrear()==DialogoUsuario.ACEPTAR){
-            tfNombre.setText(dialogoUsuario.getNombre());
-            pfPassword.setText(dialogoUsuario.getPassword());
-            
-        }
+
+        try {
+            if (this.dialogoUsuario.mostrarCrear() == DialogoUsuario.ACEPTAR) {
+                tfNombre.setText(dialogoUsuario.getNombre());
+                pfPassword.setText(dialogoUsuario.getPassword());
+                tfEmail.setText(dialogoUsuario.getEmail());
+                cbRol.setSelectedItem(dialogoUsuario.getRol());
+                controlador.crear();
+            }
+        }catch (DaoException ex) {
+                Logger.getLogger(VentanaUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }//GEN-LAST:event_miCrearActionPerformed
 
     private void miImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miImportarActionPerformed
@@ -312,15 +322,19 @@ public class VentanaUsuarios extends javax.swing.JFrame {
     private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
         limpiarCampos();
         mostrarNombre(tfBuscarUsuario.getText());
-        try{
+        try {
             controlador.buscar();
-        }catch(DaoException ex){
+        } catch (DaoException ex) {
             Logger.getLogger(VentanaUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bBuscarActionPerformed
 
     private void bListarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bListarUsuariosActionPerformed
-        controlador.listar();
+        try {
+            controlador.listar();
+        } catch (DaoException ex) {
+            Logger.getLogger(VentanaUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bListarUsuariosActionPerformed
 
     /**
@@ -357,9 +371,7 @@ public class VentanaUsuarios extends javax.swing.JFrame {
             }
         });
     }
-    
-    
-    
+
     public int mostrar() {
         opcion = CANCELAR;
         limpiarCampos();
@@ -411,53 +423,53 @@ public class VentanaUsuarios extends javax.swing.JFrame {
     public void setControlador(ControladorUsuarios controlador) {
         this.controlador = controlador;
     }
-    
-    public String getNombre(){
+
+    public String getNombre() {
         return tfNombre.getText();
     }
-    
-    public String getPassword(){
-        return pfPassword.getSelectedText();
+
+    public String getPassword() {
+        return String.valueOf(pfPassword.getPassword());
     }
-    
-    public String getEmail(){
+
+    public String getEmail() {
         return tfEmail.getText();
     }
-    
-    public String getRol(){
+
+    public String getRol() {
         return cbRol.getSelectedItem().toString();
     }
-    
-     public String getArchivo() {
+
+    public String getArchivo() {
         return selectorFicheros.getSelectedFile().getAbsolutePath();
     }
-     
-    public void mostrarNombre(String nombre){
+
+    public void mostrarNombre(String nombre) {
         tfNombre.setText(nombre);
     }
-    
-    public void mostrarPassword(String password){
-        pfPassword.setText(password); 
+
+    public void mostrarPassword(String password) {
+        pfPassword.setText(password);
     }
-    
-    public void mostrarEmail(String email){
-        tfEmail.setText(email); 
+
+    public void mostrarEmail(String email) {
+        tfEmail.setText(email);
     }
-    
-    public void mostrarRol(String rol){
+
+    public void mostrarRol(String rol) {
         cbRol.setSelectedItem(rol);
     }
-    
-    public void mostrarUsuarios(List<Usuario> listado){
+
+    public void mostrarUsuarios(List<Usuario> listado) {
         contactoTM.setUsuarios(listado);
     }
-    
-    public void mostrarMensaje(String mensaje){
+
+    public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
-    
-    public boolean solicitarConfirmacion(String mensaje){
+
+    public boolean solicitarConfirmacion(String mensaje) {
         return (JOptionPane.showConfirmDialog(this, "Seguro?") == JOptionPane.YES_OPTION);
     }
-    
+
 }
